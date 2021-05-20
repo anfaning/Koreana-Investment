@@ -1,18 +1,13 @@
 ### Keras and Tensorflow >2.0
-
 import matplotlib.pyplot as plt
 
 ### Data Collection
-import pandas_datareader as pdr
-
-## df = pdr.get_data_tiingo('AAPL', api_key=key)
-## df.to_csv('AAPL.csv')
-
 import pandas as pd
 
-#df=pd.read_csv('csv/VRT.AX.csv', index_col="Date")
-df=pd.read_csv('csv/VRT.AX.csv')
-#2016-03-03 - 2021-03-03
+df=pd.read_csv('csv/TGR.AX.csv')
+#2016-05-20 - 2021-05-20
+
+df.describe()
 
 df1=df.reset_index()['Close']
 import numpy as np
@@ -41,8 +36,8 @@ time_step = 100
 X_train, y_train = create_dataset(train_data, time_step)
 X_test, ytest = create_dataset(test_data, time_step)
 
-print(X_train.shape), print(y_train.shape)
-print(X_test.shape), print(ytest.shape)
+#print(X_train.shape), print(y_train.shape)
+#print(X_test.shape), print(ytest.shape)
 
 # reshape input to be [samples, time steps, features] which is required for LSTM
 X_train =X_train.reshape(X_train.shape[0],X_train.shape[1] , 1)
@@ -54,15 +49,18 @@ from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import LSTM
 
 model=Sequential()
-model.add(LSTM(50,return_sequences=True,input_shape=(100,1)))
-model.add(LSTM(50,return_sequences=True))
-model.add(LSTM(50))
-model.add(Dense(1))
-model.compile(loss='mean_squared_error',optimizer='adam')
+model.add(LSTM(128,return_sequences=True,input_shape=(100,1)))
+model.add(LSTM(128,return_sequences=True))
+model.add(LSTM(128))
+model.add(Dense(32, kernel_initializer="uniform", activation='relu'))
+model.add(Dense(1, kernel_initializer="uniform", activation='linear'))
+model.compile(loss='mse', optimizer='adam', metrics=['accuracy'])
+#model.add(Dense(1))
+#model.compile(loss='mean_squared_error',optimizer='adam')
 
 model.summary()
 
-model.fit(X_train,y_train,validation_data=(X_test,ytest),epochs=100,batch_size=64,verbose=1)
+model.fit(X_train,y_train,validation_data=(X_test,ytest),epochs=500,batch_size=64,verbose=1)
 
 import tensorflow as tf
 #tf.__version__
@@ -156,4 +154,4 @@ plt.plot(df3)
 plt.show()
 
 df_output = pd.DataFrame(scaler.inverse_transform(lst_output))
-df_output.to_csv(r'csv/VRT.AX_Prd.csv', index = False, header=True)
+df_output.to_csv(r'csv/TGR.AX_Prd.csv', index = False, header=True)
