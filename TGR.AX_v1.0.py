@@ -14,7 +14,6 @@ np.random.seed(37)
 # Setting the seed for python random numbers
 rn.seed(1254)
 
-
 from sklearn.preprocessing import MinMaxScaler
 
 yf.pdr_override()
@@ -57,12 +56,15 @@ X_train =X_train.reshape(X_train.shape[0],X_train.shape[1] , 1)
 X_test = X_test.reshape(X_test.shape[0],X_test.shape[1] , 1)
 
 ### Create the Stacked LSTM model
+
+import tensorflow as tf
+#tf.__version__
+tf.random.set_seed(2)
+
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout
 from tensorflow.keras.layers import LSTM
 
-# Setting the graph-level random seed.
-tf.set_random_seed(89)
 
 d = 0.2
 model=Sequential()
@@ -85,8 +87,6 @@ model.fit(X_train,y_train,validation_data=(X_test,ytest),epochs=100,batch_size=6
 end = datetime.now()
 end_time = end.strftime("%H:%M:%S")
 
-import tensorflow as tf
-#tf.__version__
 
 ### Lets Do the prediction and check performance metrics
 train_predict=model.predict(X_train)
