@@ -5,6 +5,17 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from datetime import datetime, timedelta
 import yfinance as yf
+import numpy as np
+import random as rn
+
+# Setting the seed for numpy-generated random numbers
+np.random.seed(37)
+
+# Setting the seed for python random numbers
+rn.seed(1254)
+
+
+from sklearn.preprocessing import MinMaxScaler
 
 yf.pdr_override()
 ticker = "TGR.AX"
@@ -15,9 +26,7 @@ df = yf.download(ticker, period= "5y")
 #df.describe()
 
 df1=df.reset_index()['Open']
-import numpy as np
 
-from sklearn.preprocessing import MinMaxScaler
 scaler=MinMaxScaler(feature_range=(0,1))
 df1=scaler.fit_transform(np.array(df1).reshape(-1,1))
 
@@ -51,6 +60,9 @@ X_test = X_test.reshape(X_test.shape[0],X_test.shape[1] , 1)
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout
 from tensorflow.keras.layers import LSTM
+
+# Setting the graph-level random seed.
+tf.set_random_seed(89)
 
 d = 0.2
 model=Sequential()
