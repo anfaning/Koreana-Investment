@@ -10,9 +10,11 @@ yf.pdr_override()
 ticker = "TGR.AX"
 
 df = yf.download(ticker, period= "5y")
+# df = yf.download(ticker, start= "2016-05-31", end= "2021-06-01")
+
 #df.describe()
 
-df1=df.reset_index()['Close']
+df1=df.reset_index()['Open']
 import numpy as np
 
 from sklearn.preprocessing import MinMaxScaler
@@ -66,7 +68,7 @@ model.summary()
 start = datetime.now()
 start_time = start.strftime("%H:%M:%S")
 
-model.fit(X_train,y_train,validation_data=(X_test,ytest),epochs=500,batch_size=64,verbose=1)
+model.fit(X_train,y_train,validation_data=(X_test,ytest),epochs=100,batch_size=64,verbose=1)
 
 end = datetime.now()
 end_time = end.strftime("%H:%M:%S")
@@ -93,19 +95,19 @@ math.sqrt(mean_squared_error(ytest,test_predict))
 
 ### Plotting
 # shift train predictions for plotting
-# look_back=100
-# trainPredictPlot = np.empty_like(df1)
-# trainPredictPlot[:, :] = np.nan
-# trainPredictPlot[look_back:len(train_predict)+look_back, :] = train_predict
-# # shift test predictions for plotting
-# testPredictPlot = np.empty_like(df1)
-# testPredictPlot[:, :] = np.nan
-# testPredictPlot[len(train_predict)+(look_back*2)+1:len(df1)-1, :] = test_predict
-# # plot baseline and predictions
-# plt.plot(scaler.inverse_transform(df1))
-# plt.plot(trainPredictPlot)
-# plt.plot(testPredictPlot)
-# plt.show()
+look_back=100
+trainPredictPlot = np.empty_like(df1)
+trainPredictPlot[:, :] = np.nan
+trainPredictPlot[look_back:len(train_predict)+look_back, :] = train_predict
+# shift test predictions for plotting
+testPredictPlot = np.empty_like(df1)
+testPredictPlot[:, :] = np.nan
+testPredictPlot[len(train_predict)+(look_back*2)+1:len(df1)-1, :] = test_predict
+# plot baseline and predictions
+plt.plot(scaler.inverse_transform(df1))
+plt.plot(trainPredictPlot)
+plt.plot(testPredictPlot)
+plt.show()
 
 #len(test_data)
 

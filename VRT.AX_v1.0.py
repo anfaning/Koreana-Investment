@@ -14,7 +14,7 @@ df = yf.download(ticker, period= "5y")
 
 #df.describe()
 
-df1=df.reset_index()['Close']
+df1=df.reset_index()['Open']
 import numpy as np
 
 from sklearn.preprocessing import MinMaxScaler
